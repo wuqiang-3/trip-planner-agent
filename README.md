@@ -191,14 +191,6 @@ Agent可以自动调用以下高德地图MCP工具:
 - `GET /api/map/weather` - 查询天气
 - `POST /api/map/route` - 规划路线
 
-## 🤝 贡献指南
-
-欢迎提交Pull Request或Issue!
-
-## 📜 开源协议
-
-CC BY-NC-SA 4.0
-
 ## 🙏 致谢
 
 - [HelloAgents](https://github.com/datawhalechina/Hello-Agents) - 智能体教程

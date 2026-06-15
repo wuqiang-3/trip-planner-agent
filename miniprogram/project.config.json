@@ -1,0 +1,14 @@
+{
+  "miniprogramRoot": "./",
+  "projectname": "trip-planner-miniprogram",
+  "description": "智能旅行助手小程序版",
+  "setting": {
+    "urlCheck": false,
+    "es6": true,
+    "postcss": true,
+    "minified": true
+  },
+  "compileType": "miniprogram",
+  "libVersion": "latest",
+  "appid": "touristappid"
+}

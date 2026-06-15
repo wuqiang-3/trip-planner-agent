@@ -1,0 +1,9 @@
+.page { padding-bottom:60rpx; }
+.header { background:#2b6cb0; color:#fff; padding:40rpx 32rpx; }
+.title { font-size:44rpx; font-weight:700; }
+.subtitle { display:block; margin-top:8rpx; font-size:26rpx; opacity:.9; }
+.budget { margin-top:16rpx; font-size:28rpx; background:rgba(255,255,255,.2); display:inline-block; padding:6rpx 20rpx; border-radius:24rpx; }
+.suggest { background:#fffaf0; margin:20rpx 24rpx; padding:24rpx; border-radius:16rpx; border-left:8rpx solid #dd6b20; }
+.suggest-title { font-size:28rpx; font-weight:700; color:#dd6b20; }
+.suggest-body { display:block; margin-top:10rpx; font-size:26rpx; color:#4a5568; line-height:1.6; }
+.share-btn { margin:40rpx 24rpx 0; background:#2b6cb0; color:#fff; border-radius:48rpx; }

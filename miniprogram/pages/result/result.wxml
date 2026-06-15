@@ -1,0 +1,22 @@
+<view wx:if="{{ plan }}" class="page">
+  <view class="header">
+    <text class="title">{{ plan.city }}</text>
+    <text class="subtitle">{{ plan.start_date }} ~ {{ plan.end_date }} · {{ plan.days.length }}日游</text>
+    <view wx:if="{{ plan.budget }}" class="budget">预算合计 ¥{{ plan.budget.total }}</view>
+  </view>
+
+  <day-card
+    wx:for="{{ plan.days }}"
+    wx:key="date"
+    day="{{ item }}"
+    index="{{ index }}"
+    weather="{{ weatherMap[item.date] }}"
+  />
+
+  <view wx:if="{{ plan.overall_suggestions }}" class="suggest">
+    <text class="suggest-title">💡 总体建议</text>
+    <text class="suggest-body">{{ plan.overall_suggestions }}</text>
+  </view>
+
+  <button class="share-btn" open-type="share">分享给好友</button>
+</view>

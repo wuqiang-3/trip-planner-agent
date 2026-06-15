@@ -5,4 +5,21 @@ function computeTravelDays(startDate, endDate) {
   return Math.round((e - s) / 86400000) + 1
 }
 
-module.exports = { computeTravelDays }
+function validateForm(form) {
+  if (!form.city || !form.city.trim()) {
+    return { valid: false, message: '请填写目的地城市' }
+  }
+  if (!form.start_date || !form.end_date) {
+    return { valid: false, message: '请选择出发和返程日期' }
+  }
+  const days = computeTravelDays(form.start_date, form.end_date)
+  if (days <= 0) {
+    return { valid: false, message: '返程日期不能早于出发日期' }
+  }
+  if (days > 30) {
+    return { valid: false, message: '行程天数不能超过30天' }
+  }
+  return { valid: true, message: '' }
+}
+
+module.exports = { computeTravelDays, validateForm }

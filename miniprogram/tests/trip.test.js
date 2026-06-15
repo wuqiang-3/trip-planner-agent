@@ -11,3 +11,26 @@ describe('computeTravelDays', () => {
     expect(trip.computeTravelDays('2026-06-22', '2026-06-20')).toBe(0)
   })
 })
+
+describe('validateForm', () => {
+  const base = { city: '杭州', start_date: '2026-06-20', end_date: '2026-06-22' }
+
+  test('合法表单通过', () => {
+    expect(trip.validateForm(base)).toEqual({ valid: true, message: '' })
+  })
+  test('城市为空报错', () => {
+    const r = trip.validateForm({ ...base, city: '' })
+    expect(r.valid).toBe(false)
+    expect(r.message).toContain('城市')
+  })
+  test('结束早于开始报错', () => {
+    const r = trip.validateForm({ ...base, end_date: '2026-06-19' })
+    expect(r.valid).toBe(false)
+    expect(r.message).toContain('日期')
+  })
+  test('超过30天报错', () => {
+    const r = trip.validateForm({ city: '杭州', start_date: '2026-01-01', end_date: '2026-03-01' })
+    expect(r.valid).toBe(false)
+    expect(r.message).toContain('30')
+  })
+})

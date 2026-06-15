@@ -1,0 +1,64 @@
+<view class="page">
+  <view class="hero">
+    <text class="hero-title">🧳 智能旅行助手</text>
+    <text class="hero-sub">告诉我去哪、玩几天,AI 帮你排好行程</text>
+  </view>
+
+  <view class="form">
+    <view class="field">
+      <text class="label">目的地城市</text>
+      <input class="input" data-field="city" value="{{ form.city }}" placeholder="如:杭州" bindinput="onInput" />
+    </view>
+
+    <view class="field">
+      <text class="label">出发日期</text>
+      <picker mode="date" data-field="start_date" value="{{ form.start_date }}" bindchange="onDate">
+        <view class="picker">{{ form.start_date || '请选择' }}</view>
+      </picker>
+    </view>
+
+    <view class="field">
+      <text class="label">返程日期</text>
+      <picker mode="date" data-field="end_date" value="{{ form.end_date }}" bindchange="onDate">
+        <view class="picker">{{ form.end_date || '请选择' }}</view>
+      </picker>
+    </view>
+
+    <view class="field">
+      <text class="label">交通方式</text>
+      <picker range="{{ transportationOptions }}" bindchange="onPickTransportation">
+        <view class="picker">{{ form.transportation }}</view>
+      </picker>
+    </view>
+
+    <view class="field">
+      <text class="label">住宿偏好</text>
+      <picker range="{{ accommodationOptions }}" bindchange="onPickAccommodation">
+        <view class="picker">{{ form.accommodation }}</view>
+      </picker>
+    </view>
+
+    <view class="field">
+      <text class="label">旅行偏好</text>
+      <view class="prefs">
+        <text
+          wx:for="{{ preferenceOptions }}"
+          wx:key="*this"
+          data-pref="{{ item }}"
+          bindtap="onTogglePref"
+          class="pref {{ form.preferences.includes(item) ? 'pref-on' : '' }}"
+        >{{ item }}</text>
+      </view>
+    </view>
+
+    <view class="field">
+      <text class="label">额外要求(选填)</text>
+      <textarea class="textarea" data-field="free_text_input" value="{{ form.free_text_input }}" placeholder="如:想看升旗、对海鲜过敏…" bindinput="onInput" />
+    </view>
+
+    <button class="submit" bindtap="onSubmit">生成行程</button>
+    <view class="history-entry" bindtap="goHistory">查看历史行程 ›</view>
+  </view>
+
+  <loading-overlay show="{{ loading }}" />
+</view>

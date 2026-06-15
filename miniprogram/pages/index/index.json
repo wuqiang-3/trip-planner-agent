@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "智能旅行助手",
+  "usingComponents": {
+    "loading-overlay": "/components/loading-overlay/loading-overlay"
+  }
+}

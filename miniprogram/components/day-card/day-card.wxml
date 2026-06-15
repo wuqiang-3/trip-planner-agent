@@ -1,0 +1,41 @@
+<view class="card">
+  <view class="card-head">
+    <text class="day-no">第{{ index + 1 }}天</text>
+    <text class="day-date">{{ day.date }}</text>
+    <text wx:if="{{ weather }}" class="day-weather">{{ weather.day_weather }} {{ weather.day_temp }}°/{{ weather.night_temp }}°</text>
+  </view>
+
+  <view wx:if="{{ day.description }}" class="day-desc">{{ day.description }}</view>
+  <view class="day-tags">
+    <text class="tag">🚇 {{ day.transportation }}</text>
+    <text class="tag">🏨 {{ day.accommodation }}</text>
+  </view>
+
+  <view wx:if="{{ day.attractions.length }}" class="block">
+    <view class="block-title">🏛 景点</view>
+    <view wx:for="{{ day.attractions }}" wx:key="name" class="poi">
+      <view class="poi-line">
+        <text class="poi-name">{{ item.name }}</text>
+        <text class="poi-meta">游玩{{ item.visit_duration }}分 · {{ item.ticket_price > 0 ? '¥' + item.ticket_price : '免费' }}</text>
+      </view>
+      <view wx:if="{{ item.address }}" class="poi-sub">📍 {{ item.address }}</view>
+      <view wx:if="{{ item.description }}" class="poi-sub">{{ item.description }}</view>
+    </view>
+  </view>
+
+  <view wx:if="{{ day.meals.length }}" class="block">
+    <view class="block-title">🍜 餐饮</view>
+    <view wx:for="{{ day.meals }}" wx:key="name" class="poi-line">
+      <text class="poi-name">{{ item.name }}</text>
+      <text class="poi-meta">{{ item.estimated_cost > 0 ? '约¥' + item.estimated_cost : '' }}</text>
+    </view>
+  </view>
+
+  <view wx:if="{{ day.hotel }}" class="block">
+    <view class="block-title">🏨 住宿</view>
+    <view class="poi-line">
+      <text class="poi-name">{{ day.hotel.name }}</text>
+      <text class="poi-meta">{{ day.hotel.price_range || (day.hotel.estimated_cost > 0 ? '¥' + day.hotel.estimated_cost + '/晚' : '') }}</text>
+    </view>
+  </view>
+</view>

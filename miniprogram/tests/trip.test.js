@@ -95,3 +95,18 @@ describe('parseTripResponse', () => {
       .toThrow()
   })
 })
+
+describe('边界场景', () => {
+  test('全空格城市名被拦截', () => {
+    const r = trip.validateForm({ city: '   ', start_date: '2026-06-20', end_date: '2026-06-22' })
+    expect(r.valid).toBe(false)
+    expect(r.message).toContain('城市')
+  })
+  test('form为null返回校验失败而非抛错', () => {
+    expect(() => trip.validateForm(null)).not.toThrow()
+    expect(trip.validateForm(null).valid).toBe(false)
+  })
+  test('非法日期字符串computeTravelDays返回0', () => {
+    expect(trip.computeTravelDays('not-a-date', '2026-06-20')).toBe(0)
+  })
+})

@@ -64,3 +64,34 @@ describe('buildRequest', () => {
     expect(r.travel_days).toBe(1)
   })
 })
+
+describe('matchWeather', () => {
+  const weather = [
+    { date: '2026-06-20', day_weather: '晴', day_temp: 28, night_temp: 22 },
+    { date: '2026-06-21', day_weather: '多云', day_temp: 27, night_temp: 21 }
+  ]
+  test('按日期匹配', () => {
+    expect(trip.matchWeather(weather, '2026-06-21').day_weather).toBe('多云')
+  })
+  test('无匹配返回null', () => {
+    expect(trip.matchWeather(weather, '2026-06-30')).toBeNull()
+  })
+  test('空数组返回null', () => {
+    expect(trip.matchWeather([], '2026-06-20')).toBeNull()
+  })
+})
+
+describe('parseTripResponse', () => {
+  test('success取data', () => {
+    const data = { city: '杭州', days: [] }
+    expect(trip.parseTripResponse({ success: true, message: 'ok', data })).toBe(data)
+  })
+  test('success=false抛错带message', () => {
+    expect(() => trip.parseTripResponse({ success: false, message: '生成失败', data: null }))
+      .toThrow('生成失败')
+  })
+  test('data为空抛错', () => {
+    expect(() => trip.parseTripResponse({ success: true, message: '', data: null }))
+      .toThrow()
+  })
+})

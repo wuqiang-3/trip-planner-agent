@@ -35,4 +35,16 @@ function buildRequest(form) {
   }
 }
 
-module.exports = { computeTravelDays, validateForm, buildRequest }
+function matchWeather(weatherInfo, date) {
+  if (!Array.isArray(weatherInfo)) return null
+  return weatherInfo.find((w) => w.date === date) || null
+}
+
+function parseTripResponse(resp) {
+  if (!resp || !resp.success || !resp.data) {
+    throw new Error((resp && resp.message) || '行程生成失败,请重试')
+  }
+  return resp.data
+}
+
+module.exports = { computeTravelDays, validateForm, buildRequest, matchWeather, parseTripResponse }

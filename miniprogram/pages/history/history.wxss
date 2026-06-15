@@ -1,0 +1,8 @@
+.page { padding:24rpx; }
+.empty { text-align:center; color:#a0aec0; margin-top:120rpx; font-size:28rpx; }
+.empty-link { color:#2b6cb0; margin-top:20rpx; }
+.item { background:#fff; border-radius:16rpx; padding:28rpx 24rpx; margin-bottom:20rpx; display:flex; align-items:center; }
+.item-main { flex:1; }
+.item-city { font-size:30rpx; font-weight:600; }
+.item-date { display:block; margin-top:8rpx; font-size:24rpx; color:#a0aec0; }
+.item-del { font-size:26rpx; color:#e53e3e; padding:0 12rpx; }

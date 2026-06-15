@@ -1,0 +1,20 @@
+<view class="page">
+  <view wx:if="{{ records.length === 0 }}" class="empty">
+    <text>还没有历史行程</text>
+    <navigator url="/pages/index/index" open-type="navigateBack" class="empty-link">去生成一个 ›</navigator>
+  </view>
+
+  <view
+    wx:for="{{ records }}"
+    wx:key="id"
+    class="item"
+    data-id="{{ item.id }}"
+    bindtap="openRecord"
+  >
+    <view class="item-main">
+      <text class="item-city">{{ item.city }} · {{ item.travelDays }}日游</text>
+      <text class="item-date">{{ item.dateText }}</text>
+    </view>
+    <text class="item-del" data-id="{{ item.id }}" catchtap="deleteRecord">删除</text>
+  </view>
+</view>

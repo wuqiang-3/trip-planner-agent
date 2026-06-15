@@ -11,7 +11,7 @@
     <text class="tag">🏨 {{ day.accommodation }}</text>
   </view>
 
-  <view wx:if="{{ day.attractions.length }}" class="block">
+  <view wx:if="{{ day.attractions && day.attractions.length }}" class="block">
     <view class="block-title">🏛 景点</view>
     <view wx:for="{{ day.attractions }}" wx:key="name" class="poi">
       <view class="poi-line">
@@ -23,7 +23,7 @@
     </view>
   </view>
 
-  <view wx:if="{{ day.meals.length }}" class="block">
+  <view wx:if="{{ day.meals && day.meals.length }}" class="block">
     <view class="block-title">🍜 餐饮</view>
     <view wx:for="{{ day.meals }}" wx:key="name" class="poi-line">
       <text class="poi-name">{{ item.name }}</text>

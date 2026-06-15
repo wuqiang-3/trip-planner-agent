@@ -22,4 +22,17 @@ function validateForm(form) {
   return { valid: true, message: '' }
 }
 
-module.exports = { computeTravelDays, validateForm }
+function buildRequest(form) {
+  return {
+    city: form.city.trim(),
+    start_date: form.start_date,
+    end_date: form.end_date,
+    travel_days: computeTravelDays(form.start_date, form.end_date),
+    transportation: form.transportation,
+    accommodation: form.accommodation,
+    preferences: form.preferences || [],
+    free_text_input: form.free_text_input || ''
+  }
+}
+
+module.exports = { computeTravelDays, validateForm, buildRequest }

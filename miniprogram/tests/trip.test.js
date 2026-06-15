@@ -34,3 +34,33 @@ describe('validateForm', () => {
     expect(r.message).toContain('30')
   })
 })
+
+describe('buildRequest', () => {
+  test('补齐travel_days与默认值', () => {
+    const form = {
+      city: '杭州', start_date: '2026-06-20', end_date: '2026-06-22',
+      transportation: '公共交通', accommodation: '经济型酒店',
+      preferences: ['美食']
+    }
+    expect(trip.buildRequest(form)).toEqual({
+      city: '杭州',
+      start_date: '2026-06-20',
+      end_date: '2026-06-22',
+      travel_days: 3,
+      transportation: '公共交通',
+      accommodation: '经济型酒店',
+      preferences: ['美食'],
+      free_text_input: ''
+    })
+  })
+  test('preferences与free_text_input缺省', () => {
+    const form = {
+      city: '北京', start_date: '2026-07-01', end_date: '2026-07-01',
+      transportation: '自驾', accommodation: '民宿'
+    }
+    const r = trip.buildRequest(form)
+    expect(r.preferences).toEqual([])
+    expect(r.free_text_input).toBe('')
+    expect(r.travel_days).toBe(1)
+  })
+})

@@ -1,0 +1,5 @@
+<view wx:if="{{ show }}" class="overlay">
+  <view class="spinner"></view>
+  <text class="tip">{{ tips[step] }}</text>
+  <text class="hint">行程生成约需 30 秒至 2 分钟,请稍候</text>
+</view>

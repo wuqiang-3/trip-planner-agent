@@ -41,13 +41,14 @@
     <view class="field">
       <text class="label">旅行偏好</text>
       <view class="prefs">
-        <text
+        <view
           wx:for="{{ preferenceOptions }}"
+          wx:for-index="idx"
           wx:key="*this"
           data-pref="{{ item }}"
           bindtap="onTogglePref"
-          class="pref {{ form.preferences.includes(item) ? 'pref-on' : '' }}"
-        >{{ item }}</text>
+          class="pref {{ prefActive[idx] ? 'pref-on' : '' }}"
+        >{{ item }}</view>
       </view>
     </view>
 

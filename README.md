@@ -1,10 +1,10 @@
 # 智能旅行助手 🌍✈️
 
-基于HelloAgents框架构建的智能旅行规划助手,集成高德地图MCP服务,提供个性化的旅行计划生成。
+基于AI Agent框架构建的智能旅行规划助手,集成高德地图MCP服务,提供个性化的旅行计划生成。
 
 ## ✨ 功能特点
 
-- 🤖 **AI驱动的旅行规划**: 基于HelloAgents框架的SimpleAgent,智能生成详细的多日旅程
+- 🤖 **AI驱动的旅行规划**: 基于SimpleAgent框架,智能生成详细的多日旅程
 - 🗺️ **高德地图集成**: 通过MCP协议接入高德地图服务,支持景点搜索、路线规划、天气查询
 - 🧠 **智能工具调用**: Agent自动调用高德地图MCP工具,获取实时POI、路线和天气信息
 - 🎨 **现代化前端**: Vue3 + TypeScript + Vite,响应式设计,流畅的用户体验
@@ -13,7 +13,7 @@
 ## 🏗️ 技术栈
 
 ### 后端
-- **框架**: HelloAgents (基于SimpleAgent)
+- **框架**: SimpleAgent
 - **API**: FastAPI
 - **MCP工具**: amap-mcp-server (高德地图)
 - **LLM**: 支持多种LLM提供商(OpenAI, DeepSeek等)
@@ -28,7 +28,7 @@
 ## 📁 项目结构
 
 ```
-helloagents-trip-planner/
+trip-planner/
 ├── backend/                    # 后端服务
 │   ├── app/
 │   │   ├── agents/            # Agent实现
@@ -133,7 +133,7 @@ npm run dev
 2. 点击"生成旅行计划"按钮
 
 3. 系统将:
-   - 调用HelloAgents Agent生成初步计划
+   - 调用AI Agent生成初步计划
    - Agent自动调用高德地图MCP工具搜索景点
    - Agent获取天气信息和路线规划
    - 整合所有信息生成完整行程
@@ -147,7 +147,7 @@ npm run dev
 
 ## 🔧 核心实现
 
-### HelloAgents Agent集成
+### AI Agent集成
 
 ```python
 from hello_agents import SimpleAgent, HelloAgentsLLM
@@ -200,5 +200,5 @@ Agent可以自动调用以下高德地图MCP工具:
 
 ---
 
-**HelloAgents智能旅行助手** - 让旅行计划变得简单而智能 🌈
+**趣游智能旅行助手** - 让旅行计划变得简单而智能 🌈
 

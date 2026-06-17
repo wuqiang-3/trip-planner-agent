@@ -1,4 +1,4 @@
-# HelloAgents框架
+# AI Agent框架
 hello-agents[protocols]>=0.2.4,<=0.2.9
 
 # FastAPI和相关依赖

@@ -1,4 +1,4 @@
-"""LLM服务模块"""
+"""LLM服务模块 (基于hello_agents库)"""
 
 from hello_agents import HelloAgentsLLM
 from ..config import get_settings
@@ -19,7 +19,7 @@ def get_llm() -> HelloAgentsLLM:
     if _llm_instance is None:
         settings = get_settings()
         
-        # HelloAgentsLLM会自动从环境变量读取配置
+        # hello_agents库的LLM会自动从环境变量读取配置
         # 包括OPENAI_API_KEY, OPENAI_BASE_URL, OPENAI_MODEL等
         _llm_instance = HelloAgentsLLM()
         

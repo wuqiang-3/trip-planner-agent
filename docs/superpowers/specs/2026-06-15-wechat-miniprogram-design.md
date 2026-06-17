@@ -10,7 +10,7 @@
 ## 1. 背景与目标
 
 现有 `trip-planner-agent` 已有:
-- **后端**:FastAPI + HelloAgents(SimpleAgent) + 高德地图 MCP,核心接口 `POST /api/trip/plan`,Agent 自动调用高德工具(POI/天气/路线)生成多日行程。
+- **后端**:FastAPI + SimpleAgent + 高德地图 MCP,核心接口 `POST /api/trip/plan`,Agent 自动调用高德工具(POI/天气/路线)生成多日行程。
 - **Web 前端**:Vue3 + TS + Vite + Ant Design Vue + 高德 JS API。
 
 **目标**:在同一仓库内新增**微信小程序端**,复用现有后端,做出一个能用、好看的 v1。
@@ -33,7 +33,7 @@
 ┌──────────────────┐           ┌────────────────────────┐
 │ 输入页 index      │           │ FastAPI                 │
 │   ↓ wx.request    │ ──POST──▶ │ /api/trip/plan          │
-│ 结果页 result     │ ◀─JSON─── │  → HelloAgents Agent     │
+│ 结果页 result     │ ◀─JSON─── │  → AI Agent              │
 │   ↓ Storage       │           │  → 高德 MCP(POI/天气/路线)│
 │ 历史页 history    │           └────────────────────────┘
 └──────────────────┘

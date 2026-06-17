@@ -13,6 +13,7 @@ Page({
     transportationOptions: env.TRANSPORTATION_OPTIONS,
     accommodationOptions: env.ACCOMMODATION_OPTIONS,
     preferenceOptions: env.PREFERENCE_OPTIONS,
+    prefActive: env.PREFERENCE_OPTIONS.map(() => false),
     loading: false
   },
 
@@ -32,9 +33,17 @@ Page({
   },
   onTogglePref(e) {
     const p = e.currentTarget.dataset.pref
+    const idx = this.data.preferenceOptions.indexOf(p)
     const cur = this.data.form.preferences
     const next = cur.includes(p) ? cur.filter((x) => x !== p) : [...cur, p]
-    this.setData({ 'form.preferences': next })
+
+    const prefActive = [...this.data.prefActive]
+    prefActive[idx] = !prefActive[idx]
+
+    this.setData({
+      'form.preferences': next,
+      prefActive
+    })
   },
 
   async onSubmit() {

@@ -72,11 +72,17 @@ async def health_check():
         # 检查Agent是否可用
         agent = get_trip_planner_agent()
         
+        # 获取各Agent的工具统计
+        tools = {
+            "attraction": len(agent.attraction_agent.list_tools()),
+            "weather": len(agent.weather_agent.list_tools()),
+            "hotel": len(agent.hotel_agent.list_tools()),
+            "planner": len(agent.planner_agent.list_tools()),
+        }
         return {
             "status": "healthy",
             "service": "trip-planner",
-            "agent_name": agent.agent.name,
-            "tools_count": len(agent.agent.list_tools())
+            "tools": tools,
         }
     except Exception as e:
         raise HTTPException(

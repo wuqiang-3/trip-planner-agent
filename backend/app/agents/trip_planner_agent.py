@@ -163,16 +163,11 @@ class MultiAgentTripPlanner:
             settings = get_settings()
             self.llm = get_llm()
 
-            # 创建共享的MCP工具(只创建一次)
+            # 创建共享的MCP工具(只创建一次)，带重试机制
             print("  - 创建共享MCP工具...")
-            self.amap_tool = MCPTool(
-                name="amap",
-                description="高德地图服务",
-                server_command=["uvx", "amap-mcp-server"],
-                env={"AMAP_MAPS_API_KEY": settings.amap_api_key},
-                auto_expand=True
-            )
-            self.amap_tool.expandable=True
+            self.amap_tool = self._create_amap_tool_with_retry(settings)
+
+            self.amap_tool.expandable = True
 
             # 创建景点搜索Agent
             print("  - 创建景点搜索Agent...")
@@ -209,17 +204,93 @@ class MultiAgentTripPlanner:
                 system_prompt=PLANNER_AGENT_PROMPT
             )
 
+            tool_count = len(self.attraction_agent.list_tools())
             print(f"✅ 多智能体系统初始化成功")
-            print(f"   景点搜索Agent: {len(self.attraction_agent.list_tools())} 个工具")
+            print(f"   景点搜索Agent: {tool_count} 个工具")
             print(f"   天气查询Agent: {len(self.weather_agent.list_tools())} 个工具")
             print(f"   酒店推荐Agent: {len(self.hotel_agent.list_tools())} 个工具")
+
+            if tool_count == 0:
+                print("⚠️  警告: 没有工具被注册，MCP连接可能失败")
+                print("   建议检查网络环境和AMAP_API_KEY配置后重启")
 
         except Exception as e:
             print(f"❌ 多智能体系统初始化失败: {str(e)}")
             import traceback
             traceback.print_exc()
             raise
-    
+
+    def _create_amap_tool_with_retry(self, settings, max_retries: int = 3):
+        """
+        创建高德MCP工具，带重试机制
+
+        解决 reload=True 或线程竞争导致的 _discover_tools() 静默失败问题
+        （coroutine 'discover' was never awaited → _available_tools = []）
+        """
+        import time
+        import shutil
+        import os
+
+        # ── 查找 uvx 绝对路径 ──────────────────────────────────────────
+        uvx_path = shutil.which('uvx')
+        if not uvx_path:
+            # 可能在 ~/.local/bin，但没在 PATH 里
+            home_uvx = os.path.expanduser('~/.local/bin/uvx')
+            if os.path.isfile(home_uvx):
+                uvx_path = home_uvx
+            else:
+                print("  ❌ 未找到 uvx 命令。请安装 Rust 版 uv: curl -LsSf https://astral.sh/uv/install.sh | sh")
+
+        # ── 确保子进程能找到 uvx ─────────────────────────────────────
+        mcp_env = {"AMAP_MAPS_API_KEY": settings.amap_api_key}
+        current_path = os.environ.get("PATH", "")
+        local_bin = os.path.expanduser('~/.local/bin')
+        if local_bin not in current_path:
+            mcp_env["PATH"] = f"{local_bin}:{current_path}"
+
+        server_cmd = [uvx_path, "amap-mcp-server"] if uvx_path else ["uvx", "amap-mcp-server"]
+
+        last_error = None
+        for attempt in range(1, max_retries + 1):
+            if attempt > 1:
+                print(f"  - 重试MCP连接 ({attempt}/{max_retries})...")
+                time.sleep(2)
+
+            tool = MCPTool(
+                name="amap",
+                description="高德地图服务",
+                server_command=server_cmd,
+                env=mcp_env,
+                auto_expand=True
+            )
+
+            count = len(tool._available_tools)
+            if count > 0:
+                print(f"  ✅ MCP连接成功: 发现 {count} 个工具")
+                for t in tool._available_tools[:6]:
+                    print(f"       - {t.get('name', '?')}: {t.get('description', '')[:50]}")
+                return tool
+
+            # 诊断：尝试手动启动一次看具体错误
+            try:
+                import subprocess
+                result = subprocess.run(
+                    server_cmd, capture_output=True, text=True, timeout=5,
+                    env={**os.environ, **mcp_env}
+                )
+                err_detail = result.stderr[:200] if result.stderr else result.stdout[:200]
+            except Exception as e:
+                err_detail = str(e)
+
+            last_error = f"uvx启动失败: {err_detail} (尝试 {attempt}/{max_retries})"
+            print(f"  ⚠️  {last_error}")
+
+        # 所有重试都失败
+        print(f"  ❌ MCP连接失败 ({max_retries}次重试均失败)")
+        print(f"     错误: {last_error}")
+        print(f"     请检查: 1) uvx 命令可用(已安装于 {uvx_path})  2) amap-mcp-server 可下载  3) 网络连通  4) AMAP_API_KEY 配置正确")
+        return tool
+
     def plan_trip(self, request: TripRequest) -> TripPlan:
         """
         使用多智能体协作生成旅行计划

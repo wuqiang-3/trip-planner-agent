@@ -4,6 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from ..config import get_settings, validate_config, print_config
 from .routes import trip, poi, map as map_routes
+from ..agents.trip_planner_agent import get_trip_planner_agent
 
 # 获取配置
 settings = get_settings()
@@ -54,6 +55,24 @@ async def startup_event():
     print("\n" + "="*60)
     print("📚 API文档: http://localhost:8000/docs")
     print("📖 ReDoc文档: http://localhost:8000/redoc")
+
+    # 预初始化AI Agent系统（提前建立MCP连接，避免首次请求超时）
+    print("\n" + "-"*60)
+    print("🤖 预初始化AI Agent系统...")
+    try:
+        # 同步运行初始化（使用run_in_executor避免阻塞事件循环）
+        import asyncio, concurrent.futures
+        loop = asyncio.get_running_loop()
+        with concurrent.futures.ThreadPoolExecutor() as pool:
+            await loop.run_in_executor(pool, get_trip_planner_agent)
+        print("✅ AI Agent系统初始化完成")
+    except Exception as e:
+        print(f"❌ AI Agent系统初始化失败: {e}")
+        import traceback
+        traceback.print_exc()
+        print("⚠️  服务器将继续运行，但Agent功能可能不可用")
+        print("   请检查.env配置和网络连接后重启")
+
     print("="*60 + "\n")
 
 

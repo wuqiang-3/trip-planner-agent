@@ -10,7 +10,7 @@ if __name__ == "__main__":
         "app.api.main:app",
         host=settings.host,
         port=settings.port,
-        reload=True,
+        reload=False,  # reload=True 会触发 watchfiles 频繁重启，导致 MCP 工具发现被中断
         log_level=settings.log_level.lower()
     )
 

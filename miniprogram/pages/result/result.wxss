@@ -6,4 +6,20 @@
 .suggest { background:#fffaf0; margin:20rpx 24rpx; padding:24rpx; border-radius:16rpx; border-left:8rpx solid #dd6b20; }
 .suggest-title { font-size:28rpx; font-weight:700; color:#dd6b20; }
 .suggest-body { display:block; margin-top:10rpx; font-size:26rpx; color:#4a5568; line-height:1.6; }
-.share-btn { margin:40rpx 24rpx 0; background:#2b6cb0; color:#fff; border-radius:48rpx; }
+
+/* 按钮组 */
+.btn-group { margin:40rpx 24rpx 0; display:flex; gap:16rpx; flex-direction:column; }
+.share-btn { background:#2b6cb0; color:#fff; border-radius:48rpx; }
+.image-btn { background:#fff; color:#2b6cb0; border-radius:48rpx; border:2rpx solid #2b6cb0; }
+
+/* 隐藏 Canvas */
+.hidden-canvas { position:fixed; left:-9999px; top:-9999px; width:320px; height:600px; pointer-events:none; z-index:-1; }
+
+/* 预览弹窗 */
+.preview-mask { position:fixed; inset:0; background:rgba(0,0,0,.6); display:flex; align-items:center; justify-content:center; z-index:100; }
+.preview-box { width:80%; max-height:85vh; background:#fff; border-radius:24rpx; overflow:hidden; display:flex; flex-direction:column; }
+.preview-scroll { flex:1; max-height:70vh; }
+.preview-img { width:100%; }
+.preview-actions { display:flex; gap:16rpx; padding:20rpx 24rpx; border-top:1rpx solid #eee; }
+.save-btn { flex:1; background:#2b6cb0; color:#fff; border-radius:48rpx; font-size:26rpx; }
+.close-btn { flex:1; background:#f5f5f5; color:#666; border-radius:48rpx; font-size:26rpx; }

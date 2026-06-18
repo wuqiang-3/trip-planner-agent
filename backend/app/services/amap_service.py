@@ -12,38 +12,70 @@ _amap_mcp_tool = None
 def get_amap_mcp_tool() -> MCPTool:
     """
     获取高德地图MCP工具实例(单例模式)
-    
+
     Returns:
         MCPTool实例
     """
     global _amap_mcp_tool
-    
+
     if _amap_mcp_tool is None:
+        import shutil
+        import os
+
         settings = get_settings()
-        
+
         if not settings.amap_api_key:
             raise ValueError("高德地图API Key未配置,请在.env文件中设置AMAP_API_KEY")
-        
+
+        # ── 查找 uvx 绝对路径 ──────────────────────────────────────────
+        uvx_path = shutil.which('uvx')
+        if not uvx_path:
+            home_uvx = os.path.expanduser('~/.local/bin/uvx')
+            if os.path.isfile(home_uvx):
+                uvx_path = home_uvx
+            else:
+                print("  ❌ 未找到 uvx 命令")
+
+        # ── 确保子进程能找到 uvx ─────────────────────────────────────
+        mcp_env = {"AMAP_MAPS_API_KEY": settings.amap_api_key}
+        local_bin = os.path.expanduser('~/.local/bin')
+        current_path = os.environ.get("PATH", "")
+        if local_bin not in current_path:
+            mcp_env["PATH"] = f"{local_bin}:{current_path}"
+
+        server_cmd = [uvx_path, "amap-mcp-server"] if uvx_path else ["uvx", "amap-mcp-server"]
+
         # 创建MCP工具
         _amap_mcp_tool = MCPTool(
             name="amap",
             description="高德地图服务,支持POI搜索、路线规划、天气查询等功能",
-            server_command=["uvx", "amap-mcp-server"],
-            env={"AMAP_MAPS_API_KEY": settings.amap_api_key},
+            server_command=server_cmd,
+            env=mcp_env,
             auto_expand=True  # 自动展开为独立工具
         )
-        
-        print(f"✅ 高德地图MCP工具初始化成功")
-        print(f"   工具数量: {len(_amap_mcp_tool._available_tools)}")
-        
-        # 打印可用工具列表
-        if _amap_mcp_tool._available_tools:
+
+        count = len(_amap_mcp_tool._available_tools)
+        if count > 0:
+            print(f"✅ 高德地图MCP工具初始化成功")
+            print(f"   工具数量: {count}")
             print("   可用工具:")
-            for tool in _amap_mcp_tool._available_tools[:5]:  # 只打印前5个
+            for tool in _amap_mcp_tool._available_tools[:5]:
                 print(f"     - {tool.get('name', 'unknown')}")
-            if len(_amap_mcp_tool._available_tools) > 5:
-                print(f"     ... 还有 {len(_amap_mcp_tool._available_tools) - 5} 个工具")
-    
+            if count > 5:
+                print(f"     ... 还有 {count - 5} 个工具")
+        else:
+            # 诊断：手动启动一次看错误
+            try:
+                import subprocess
+                result = subprocess.run(
+                    server_cmd, capture_output=True, text=True, timeout=5,
+                    env={**os.environ, **mcp_env}
+                )
+                err = result.stderr[:300] if result.stderr else result.stdout[:300]
+            except Exception as e:
+                err = str(e)
+            print(f"⚠️  MCP工具发现失败: {err}")
+
     return _amap_mcp_tool
 
 

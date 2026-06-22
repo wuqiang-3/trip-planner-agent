@@ -2,4 +2,9 @@
 .spinner { width:80rpx; height:80rpx; border:8rpx solid #ebf4ff; border-top-color:#2b6cb0; border-radius:50%; animation:spin 0.9s linear infinite; }
 @keyframes spin { to { transform:rotate(360deg); } }
 .tip { margin-top:32rpx; font-size:30rpx; color:#2b6cb0; font-weight:600; }
-.hint { margin-top:12rpx; font-size:24rpx; color:#a0aec0; }
+
+/* 进度条 */
+.progress-track { width:400rpx; height:8rpx; margin-top:24rpx; background:#e2e8f0; border-radius:4rpx; overflow:hidden; }
+.progress-fill { height:100%; background:linear-gradient(90deg,#2b6cb0,#63b3ed); border-radius:4rpx; transition:width 0.6s ease; }
+
+.hint { margin-top:16rpx; font-size:24rpx; color:#a0aec0; }
